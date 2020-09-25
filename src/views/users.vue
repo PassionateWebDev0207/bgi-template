@@ -1,9 +1,9 @@
 <template>
-  <router-view />
+  <div class="users view"></div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  
 }
 </script>

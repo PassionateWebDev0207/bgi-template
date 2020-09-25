@@ -1,9 +1,9 @@
 <template>
-  <router-view />
+  <div class="sensors-view"></div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  
 }
 </script>
