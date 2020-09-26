@@ -4,12 +4,12 @@
       <el-button
         :icon="isCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"
         type="primary"
-        @click="handleCollapse"
+        @click="isCollapse = !isCollapse"
       />
     </div>
     <el-menu class="vessel-list" :collapse="isCollapse">
       <el-menu-item v-for="(item, index) in vessels" :key="index">
-        <vessel :vessel-id="item.id" />
+        <vessel :vessel-id="item.id" :isCollapse="isCollapse" />
       </el-menu-item>
     </el-menu>
   </div>
@@ -40,12 +40,6 @@ export default {
       this.vessels = res.val().vessels ? res.val().vessels : null
     })
     this.$store.commit('setVesselListCollapse', this.isCollapse)
-  },
-  methods: {
-    handleCollapse() {
-      this.isCollapse = !this.isCollapse
-      this.$store.commit('setVesselListCollapse', this.isCollapse)
-    }
   }
 }
 </script>

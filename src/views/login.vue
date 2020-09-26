@@ -55,7 +55,6 @@ export default {
               const userRef = firebaseApp.database().ref(`/users/${userId}`)
               userRef.on('value', (res) => {
                 const data = res.val()
-                if (data.meta) this.$store.commit('setMeta', data.meta)
                 this.$store.commit('setUser', result.user)
                 this.$router.push(`/app/${Object.keys(data.vessels)[0]}`)
               })

@@ -1,15 +1,26 @@
 <template>
   <div class="vessel">
-    <div class="vessel-info" :class="vesselListCollapse ? 'hide' : null">
+    <div class="vessel-info" :class="isCollapse ? 'hide' : null">
       <template v-if="!dataLoading">
         <h2>{{ meta.name }}</h2>
         <p>{{ `Last Alarm: ${lastAlarm}` }}</p>
         <p>Sensors: Connected</p>
       </template>
     </div>
-    <div class="vessel-img">
+    <div v-if="!isCollapse" class="vessel-img">
       <img v-if="!imageLoading" :src="image.src" alt="vessel" />
       <img v-else src="@/assets/images/boat.png" alt="vessel" />
+    </div>
+    <div v-else class="vessel-img">
+      <el-tooltip placement="right">
+        <div slot="content">
+          <h2 style="margin: 0; font-weight: 300">{{ meta.name }}</h2>
+          <p>{{ `Last Alarm: ${lastAlarm}` }}</p>
+          <p>Sensors: Connected</p>          
+        </div>
+        <img v-if="!imageLoading" :src="image.src" alt="vessel" />
+        <img v-else src="@/assets/images/boat.png" alt="vessel" />
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -39,7 +50,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'vesselListCollapse'])
+    ...mapState(['user'])
   },
   created() {
     const userId = this.user.uid
@@ -78,7 +89,6 @@ export default {
   min-height: 90px;
   height: 90px;
   display: flex;
-  background-color: rgba(#000, 0.2);
   padding: 5px 0;
   &-info {
     display: flex;
@@ -106,6 +116,16 @@ export default {
     min-height: 80px;
     width: 90px;
     padding: 0 5px;
+    h2, p {
+      margin: 0;
+    }
+    h2 {
+      font-weight: 300;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 12px;
+    }
     > img {
       height: 100%;
       border: 2px solid rgba(white, 0.5);
