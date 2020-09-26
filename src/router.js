@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import firebaseApp from './firebase/app'
+import store from './store'
 
 import Login from './views/login.vue'
 import Home from './views/home.vue'
@@ -11,6 +13,19 @@ import Charts from './views/charts.vue'
 import MaintenanceLog from './views/maintenance-log.vue'
 
 Vue.use(Router)
+
+const isAuthenticated = (to, from, next) => {
+  firebaseApp.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      store.commit('setUser', user)
+      next()
+      return
+    } else {
+      store.commit('setUser', null)
+      next('/login')
+    }
+  });
+}
 
 export default new Router({
   mode: 'history',
@@ -27,17 +42,13 @@ export default new Router({
       component: Login
     },
     {
-      path: '/app',
-      name: '/app',
+      path: '/app/:vesselId',
+      name: 'app',
       component: Application,
+      beforeEnter: isAuthenticated,
       children: [
         {
           path: '',
-          name: 'dashboard',
-          component: Dashboard,
-        },
-        {
-          path: 'dashboard',
           name: 'dashboard',
           component: Dashboard,
         },

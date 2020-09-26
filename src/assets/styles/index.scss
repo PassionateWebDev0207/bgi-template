@@ -1,0 +1,45 @@
+@import './fonts';
+@import './variables';
+
+html {
+  font-family: $font-primary !important;
+  * {
+    box-sizing: border-box;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: $clr-primary;
+  font-family: $font-primary !important;
+  color: $clr-text-primary;
+  * {
+    box-sizing: border-box;
+  }
+
+  .hide {
+    display: none !important;
+  }
+}
+
+p {
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(#000, 0.2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(#000, 0.3);
+}
