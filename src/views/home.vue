@@ -18,7 +18,7 @@ export default {
     }
   },
   created() {
-    firebaseApp.auth().onAuthStateChanged(function(user) {
+    firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
         this.isLoggedIn = true
       } else {
