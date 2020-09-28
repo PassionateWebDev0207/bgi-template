@@ -5,6 +5,7 @@
     <p>Login with you BG-Link Plus app credentials.</p>
     <p style="margin: 20px 0 60px">If you don't have an account visit bluebgi.com to get started with the BG-Link Plus system.</p>
     <el-button v-if="!isLoggedIn" class="login-btn" @click="goToLoginPage">Login</el-button>
+    <el-button v-if="isLoggedIn" class="login-btn" @click="goToAppPage">Go to Application</el-button>
   </div>
 </template>
 
@@ -14,21 +15,34 @@ export default {
   name: 'home',
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
+      user: null
     }
   },
   created() {
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
         this.isLoggedIn = true
+        this.user = user
       } else {
         this.isLoggedIn = false
+        this.user = null
       }
     });
   },
   methods: {
     goToLoginPage() {
       this.$router.push('/login');
+    },
+    goToAppPage() {
+      const userId = this.user.uid
+      const userRef = firebaseApp.database().ref(`/users/${userId}`)
+      
+      userRef.on('value', (res) => {
+        const data = res.val()
+        this.$store.commit('setUser', this.user)
+        this.$router.push(`/app/${Object.keys(data.vessels)[0]}`)
+      })
     }
   }
 }

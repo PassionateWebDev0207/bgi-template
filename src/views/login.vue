@@ -1,6 +1,6 @@
 <template>
   <div class="login-view">
-    <el-card class="login-form">
+    <el-card v-if="!isLoggedIn" class="login-form">
       <h1>Login</h1>
       <el-form ref="loginForm" label-position="top" :model="loginForm">
         <el-form-item
@@ -31,6 +31,10 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <div v-else>
+      <el-button @click="goToAppPage">Go to Application</el-button>
+      <el-button @click="logout">Log out</el-button>
+    </div>
   </div>
 </template>
 
@@ -38,12 +42,27 @@
 import firebaseApp from '@/firebase/app'
 
 export default {
-  data: () => ({
-    loginForm: {
-      email: '',
-      password: ''
-    }    
-  }),
+  data() {
+    return {
+      loginForm: {
+        email: '',
+        password: ''
+      },
+      isLoggedIn: false,
+      user: null      
+    }
+  },
+  created() {
+    firebaseApp.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.isLoggedIn = true
+        this.user = user
+      } else {
+        this.isLoggedIn = false
+        this.user = null
+      }
+    });
+  },
   methods: {
     submit (formName) {
       this.$refs[formName].validate(valid => {
@@ -65,6 +84,21 @@ export default {
             })
         }
       })
+    },
+    goToAppPage() {
+      const userId = this.user.uid
+      const userRef = firebaseApp.database().ref(`/users/${userId}`)
+      
+      userRef.on('value', (res) => {
+        const data = res.val()
+        this.$store.commit('setUser', this.user)
+        this.$router.push(`/app/${Object.keys(data.vessels)[0]}`)
+      })
+    },
+    logout() {
+      firebaseApp.auth().signOut().then(() => {
+        this.$router.push('/')
+      });
     }
   }
 }
