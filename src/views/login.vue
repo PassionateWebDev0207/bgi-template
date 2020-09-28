@@ -53,6 +53,7 @@ export default {
             .then(result => {
               const userId = result.user.uid
               const userRef = firebaseApp.database().ref(`/users/${userId}`)
+              
               userRef.on('value', (res) => {
                 const data = res.val()
                 this.$store.commit('setUser', result.user)

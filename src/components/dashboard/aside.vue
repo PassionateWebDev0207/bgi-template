@@ -39,7 +39,6 @@ export default {
     userRef.on('value', (res) => {
       this.vessels = res.val().vessels ? res.val().vessels : null
     })
-    this.$store.commit('setVesselListCollapse', this.isCollapse)
   }
 }
 </script>
